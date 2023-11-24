@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class = "common-body">
+    <div class="dashboard-container">
+        <h1 style="color: red;">Enter Master Data</h1>
+        <!-- Buttons for Item Details and Customer Details -->
+        <div class="button-container">
+            <button onclick="redirectToItemDetails()">Item Details</button>
+            <button onclick="redirectToCustomerDetails()">Customer Details</button>
+        </div>
+        <script>
+            // Function to redirect to the item_details page
+            function redirectToItemDetails() {
+                window.location.href = "{{ url_for('item_details') }}";
+            }
+
+            // Function to redirect to the customer_details page
+            function redirectToCustomerDetails() {
+                window.location.href = "{{ url_for('customer_details') }}";
+            }
+        </script>
+    </div>
+</body>
+</html>
