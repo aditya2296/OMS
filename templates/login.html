@@ -15,7 +15,6 @@
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
-            <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
 
             <button type="submit">Login</button>
         </form>
@@ -25,21 +24,6 @@
         <p>Don't have an account? <a href="/signup">Sign up</a></p>
         <p>Forgot your password? <a href="/forgot_password">Reset it</a></p>
     </div>
-    <!-- At the bottom of login.html, before </body> -->
-    <script>
-        function togglePasswordVisibility() {
-            var passwordInput = document.getElementById("password");
-            var eyeIcon = document.querySelector(".eye-icon");
-
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                eyeIcon.textContent = "👁️";
-            } else {
-                passwordInput.type = "password";
-                eyeIcon.textContent = "👁️";
-            }
-        }
-    </script>
 </body>
 </html>
 
