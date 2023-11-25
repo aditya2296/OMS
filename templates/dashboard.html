@@ -3,28 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_styles.css') }}">
+    <title>OMS</title>
 </head>
-<body class = "common-body">
+<body>
     <div class="dashboard-container">
-        <h1 style="color: red;">Enter Master Data</h1>
-        <!-- Buttons for Item Details and Customer Details -->
-        <div class="button-container">
-            <button onclick="redirectToItemDetails()">Item Details</button>
-            <button onclick="redirectToCustomerDetails()">Customer Details</button>
+        <!-- First Div -->
+        <div class="dashboard-sidebar">
+            <div class="dashboard-header">
+                <img src="{{ url_for('static', filename='images/oms_circle.png') }}" alt="OMS Logo">
+                <h1>OMS</h1>
+            </div>
+            <!-- Inside the .dashboard-links div -->
+            <div class="dashboard-links">
+                <div>
+                    <a href="{{ url_for('dashboard') }}">
+                        <img src="{{ url_for('static', filename='images/oms_circle.png') }}" alt="Dashboard Icon" class="link-icon">
+                        <p style="color: #8391A2;">Dashboard</p>
+                    </a>
+                    <a href="{{ url_for('item_details') }}">
+                        <img src="{{ url_for('static', filename='images/oms_circle.png') }}" alt="Dashboard Icon" class="link-icon">
+                        <p style="color: #8391A2;">Items</p>
+                    </a>
+                    <a href="{{ url_for('dashboard') }}">
+                        <img src="{{ url_for('static', filename='images/oms_circle.png') }}" alt="Dashboard Icon" class="link-icon">
+                        <p style="color: #8391A2;">Customers</p>
+                    </a>
+                    <a href="{{ url_for('dashboard') }}">
+                        <img src="{{ url_for('static', filename='images/oms_circle.png') }}" alt="Dashboard Icon" class="link-icon">
+                        <p style="color: #8391A2;">Users</p>
+                    </a>
+                    <a href="{{ url_for('dashboard') }}">
+                        <img src="{{ url_for('static', filename='images/oms_circle.png') }}" alt="Dashboard Icon" class="link-icon">
+                        <p style="color: #8391A2;">Settings</p>
+                    </a>
+                </div>
+            </div>
         </div>
-        <script>
-            // Function to redirect to the item_details page
-            function redirectToItemDetails() {
-                window.location.href = "{{ url_for('item_details') }}";
-            }
 
-            // Function to redirect to the customer_details page
-            function redirectToCustomerDetails() {
-                window.location.href = "{{ url_for('customer_details') }}";
-            }
-        </script>
+        <!-- Other Divs (Add your content here) -->
+        <div class="dashboard-content">
+            <!-- Content for the second div -->
+        </div>
+        <div class="dashboard-footer">
+            <!-- Content for the third div -->
+        </div>
     </div>
 </body>
 </html>
