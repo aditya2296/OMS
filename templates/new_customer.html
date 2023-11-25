@@ -11,11 +11,14 @@
         <h2>Add New Customer</h2>
         <form onsubmit="return addNewCustomer()">
             <!-- Form to enter new item details -->
-            <label for="newCustomerName">Customer Name:</label>
+            <label for="newCustomerName" class="required">Customer Name</label>
             <input type="text" id="newCustomerName" name="newCustomerName" required>
-
-            <label for="newPhoneNumber">Mobile Number:</label>
+            <label for="newCustomerLocation" class="required">Location</label>
+            <input type="text" id="newCustomerLocation" name="newCustomerLocation" required>
+            <label for="newPhoneNumber" class="required">Mobile Number</label>
             <input type="number" id="newPhoneNumber" name="newPhoneNumber" required>
+            <label for="newCustomerEmail">Email</label>
+            <input type="text" id="newCustomerEmail" name="newCustomerEmail">
 
             <button type="submit">Insert</button>
         </form>
@@ -24,12 +27,16 @@
     <script>
         function addNewCustomer() { 
             var newCustomerName = document.getElementById('newCustomerName').value;
+            var newCustomerLocation = document.getElementById('newCustomerLocation').value;
             var newPhoneNumber = document.getElementById('newPhoneNumber').value;
+            var newCustomerEmail = document.getElementById('newCustomerEmail').value;
 
             // Create a new FormData object to send data to the server (Flask)
             var formData = new FormData();
             formData.append('newCustomerName', newCustomerName)
+            formData.append('newCustomerLocation', newCustomerLocation)
             formData.append('newPhoneNumber', newPhoneNumber)
+            formData.append('newCustomerEmail', newCustomerEmail)
 
             // Send a POST request to the server to save the new item
             fetch("{{ url_for('save_new_customer') }}", {
