@@ -44,8 +44,8 @@ input {
 }
 
 button {
-    background-color: #543feb;
-    color: #fff;
+    background-color: #3c4b58;
+    color: white;
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -112,4 +112,9 @@ h1 {
 
 .button-container button {
     margin-right: 10px;
+}
+
+.required::after {
+    content: ' *';
+    color: red;
 }

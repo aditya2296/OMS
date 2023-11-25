@@ -90,10 +90,14 @@ def new_customer():
 @app.route('/save_new_customer', methods=['POST'])
 def save_new_customer():
     newCustomerName = request.form.get('newCustomerName')
+    newCustomerLocation = request.form.get('newCustomerLocation')
     newPhoneNumber = request.form.get('newPhoneNumber')
+    newCustomerEmail = request.form.get('newCustomerEmail')
     new_customer = {
         'Customer Name': newCustomerName,
-        'Mobile Number': int(newPhoneNumber)
+        'Location': newCustomerLocation,
+        'Mobile Number': int(newPhoneNumber),
+        'Email': newCustomerEmail
     }
     customer_detail.append(new_customer)
 
