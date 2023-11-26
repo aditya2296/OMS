@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from validators import generate_secret_key
-import pandas as pd
+from validators import generate_secret_key, create_customers_table
+import pandas as pd, sqlite3
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = generate_secret_key()
@@ -8,6 +8,7 @@ valid_credentials = {'pmadmin': 'pass123'}
 test_credentials = {'pmtest': 'pass123'}
 item_detail = []
 customer_detail = []
+create_customers_table()
 
 @app.route('/')
 def home():
@@ -35,7 +36,12 @@ def item_details():
 
 @app.route('/customer_details')
 def customer_details():
-    return render_template('customer_details.html', customer_details=customer_detail)
+    conn = sqlite3.connect('customer_details_table.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM customer_details_table')
+    customer_details_table = c.fetchall()
+    conn.close()
+    return render_template('customer_details.html', customer_details=customer_details_table)
 
 @app.route('/new_item')
 def new_item():
@@ -95,13 +101,12 @@ def save_new_customer():
     newCustomerLocation = request.form.get('newCustomerLocation')
     newPhoneNumber = request.form.get('newPhoneNumber')
     newCustomerEmail = request.form.get('newCustomerEmail')
-    new_customer = {
-        'Customer Name': newCustomerName,
-        'Location': newCustomerLocation,
-        'Mobile Number': int(newPhoneNumber),
-        'Email': newCustomerEmail
-    }
-    customer_detail.append(new_customer)
+    
+    conn = sqlite3.connect('customer_details_table.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO customer_details_table (customername, customerlocation, customerphonenumber, customeremail) VALUES (?, ?, ?, ?)', (newCustomerName, newCustomerLocation, newPhoneNumber, newCustomerEmail))
+    conn.commit()
+    conn.close()
 
     return 'OK', 200
 
