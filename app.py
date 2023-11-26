@@ -48,13 +48,15 @@ def save_new_item():
     newItemCompany = request.form.get('newItemCompany')
     newItemQuantity = request.form.get('newItemQuantity')
     newItemPrice = request.form.get('newItemPrice')
+    newItemDiscount = request.form.get('newItemDiscount')
 
     new_item = {
         'Date of Purchase': newItemDate,
         'Item Name': newItemName,
         'Company Name': newItemCompany,
         'Quantity': int(newItemQuantity),
-        'Price': float(newItemPrice)
+        'Price': int(newItemPrice),
+        'Discount': int(newItemDiscount)
     }
     item_detail.append(new_item)
 

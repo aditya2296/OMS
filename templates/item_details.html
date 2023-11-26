@@ -54,7 +54,7 @@
         <h1 style="text-align:center">Item Details</h1>
         <div class="button-container">
             <button onclick="openNewItemClick()">Enter New Item</button>
-            <button onclick="openExcelItemClick()">Insert</button>
+            <button onclick="openExcelItemClick()">Import</button>
             <button onclick="returnDashboard()">Dashboard</button>
         </div>
 
@@ -64,9 +64,10 @@
                 <tr>
                     <th>Date of Purchase</th>
                     <th>Item Name</th>
-                    <th>Company Name</th>
+                    <th>Item Group</th>
                     <th>Quantity</th>
-                    <th>Price</th>
+                    <th>MRP</th>
+                    <th>Discount</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,6 +78,7 @@
                     <td>{{ item['Company Name'] }}</td>
                     <td>{{ item['Quantity'] }}</td>
                     <td>{{ item['Price'] }}</td>
+                    <td>{{ item['Discount'] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
