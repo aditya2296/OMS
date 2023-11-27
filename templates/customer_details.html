@@ -62,10 +62,11 @@
         <table id="customerTable">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Customer Name</th>
                     <th>Location</th>
-                    <th>Email</th>
                     <th>Mobile Number</th>
+                    <th>Email</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,6 +76,7 @@
                     <td>{{ customer[1] }}</td>
                     <td>{{ customer[2] }}</td>
                     <td>{{ customer[3] }}</td>
+                    <td>{{ customer[4] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

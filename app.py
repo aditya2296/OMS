@@ -116,25 +116,26 @@ def insert_customer_page():
 
 @app.route('/insert_from_excel_customer', methods=['POST'])
 def insert_from_excel_customer():
-    try:
-        if 'file' not in request.files:
-            return 'No file part', 400
+        try:
+            if 'file' not in request.files:
+                return 'No file part', 400
 
-        file = request.files['file']
-        if file.filename == '':
-            return 'No selected file', 400
-        if not file.filename.endswith('.xlsx'):
-            return 'Invalid file format. Please upload an Excel file (.xlsx)', 400
-        df = pd.read_excel(file)
-        new_customers = df.iloc[:, :].to_dict(orient='records')
-        customer_detail.extend(new_customers)
-        file.close
+            file = request.files['file']
+            df = pd.read_excel(file)
 
-        return render_template('customer_details.html', customer_details = customer_detail)
+            # Convert DataFrame rows to a list of dictionaries
+            customer_data = df.to_dict(orient='records')
+            conn = sqlite3.connect('customer_details_table.db')
+            c = conn.cursor()
+            for data in customer_data:
+                c.execute('INSERT INTO customer_details_table (customername, customerlocation, customerphonenumber, customeremail) VALUES (?, ?, ?, ?)', (data['Customer Name'], data['Location'], data['Email'], data['Mobile Number']))
+            conn.commit()
+            conn.close()
+            file.close
+            return redirect(url_for('customer_details'))
+        except Exception as e:
+            return str(e), 500
 
-    except Exception as e:
-        return str(e), 500
-    
 @app.route('/order_booking')
 def order_booking():
     return render_template('order_booking.html')
