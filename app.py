@@ -101,10 +101,13 @@ def save_new_customer():
     newCustomerLocation = request.form.get('newCustomerLocation')
     newPhoneNumber = request.form.get('newPhoneNumber')
     newCustomerEmail = request.form.get('newCustomerEmail')
+    customerBillingType = request.form.get('CustomerBillingType')
+    customerDeliveryType = request.form.get('CustomerDeliveryType')
+    customerRoute = request.form.get('Route')
     
     conn = sqlite3.connect('customer_details_table.db')
     c = conn.cursor()
-    c.execute('INSERT INTO customer_details_table (customername, customerlocation, customerphonenumber, customeremail) VALUES (?, ?, ?, ?)', (newCustomerName, newCustomerLocation, newPhoneNumber, newCustomerEmail))
+    c.execute('INSERT INTO customer_details_table (customername, customerlocation, customerphonenumber, customeremail, customerbillingtype, customerdeliverytype, customerroute) VALUES (?, ?, ?, ?, ?, ?, ?)', (newCustomerName, newCustomerLocation, newPhoneNumber, newCustomerEmail, customerBillingType, customerDeliveryType, customerRoute))
     conn.commit()
     conn.close()
 
