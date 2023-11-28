@@ -12,7 +12,10 @@ def create_customers_table():
             customername TEXT NOT NULL,
             customerlocation TEXT NOT NULL,
             customerphonenumber INTEGER NOT NULL,
-            customeremail TEXT NOT NULL
+            customeremail TEXT NOT NULL,
+            customerbillingtype TEXT NOT NULL,
+            customerdeliverytype TEXT NOT NULL,
+            customerroute TEXT NOT NULL
         )
     ''')
     conn.commit()
