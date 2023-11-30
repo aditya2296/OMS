@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from validators import generate_secret_key
+from validators import generate_secret_key, generate_customer_id
 import pandas as pd
 from models import Customer, db
 
@@ -107,7 +107,7 @@ def save_new_customer():
     customerDeliveryType = request.form.get('CustomerDeliveryType')
     customerRoute = request.form.get('Route')
 
-    new_customer = Customer(customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
+    new_customer = Customer(id = generate_customer_id(),customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
     db.session.add(new_customer)
     db.session.commit()
 
@@ -128,6 +128,7 @@ def insert_from_excel_customer():
 
             for index, row in df.iterrows():
                 new_customer = Customer(
+                    id = generate_customer_id(),
                     customer_name=row['Customer_Name'],
                     customer_location=row['Location'],
                     customer_phone_number=row['Mobile_Number'],

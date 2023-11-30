@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Customer(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.String(20), primary_key=True)
     customer_name = db.Column(db.String(255))
     customer_location = db.Column(db.String(255))
     customer_phone_number = db.Column(db.Integer)
