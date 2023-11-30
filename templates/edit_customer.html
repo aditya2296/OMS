@@ -16,9 +16,9 @@
             <label for="newCustomerLocation" class="required">Location</label>
             <input type="text" id="newCustomerLocation" value="{{customer.customer_location}}" name="newCustomerLocation" required>
             <label for="newPhoneNumber" class="required">Mobile Number</label>
-            <input type="number" id="newPhoneNumber"  value="{{customer.customer_phone_number}}" name="newPhoneNumber" required>
+            <input type="tel" id="newPhoneNumber" title="Mobile Number Should be of 10 digits" value="{{customer.customer_phone_number}}" name="newPhoneNumber" pattern="[0-9]{10}" required>
             <label for="newCustomerEmail">Email</label>
-            <input type="text" id="newCustomerEmail"  value="{{customer.customer_email}}" name="newCustomerEmail">
+            <input type="email" id="newCustomerEmail"  value="{{customer.customer_email}}" name="newCustomerEmail">
         </div>
         <div>
             <label for="CustomerBillingType">Billing Type</label>
