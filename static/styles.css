@@ -131,3 +131,9 @@ h1 {
     display: flex;
     gap: 10px; /* Adjust the gap as needed */
 }
+.count-container {
+    position: absolute;
+    top: 100px;
+    right: 40px;
+    font-size: 14px;
+}

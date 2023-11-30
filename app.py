@@ -43,7 +43,8 @@ def item_details():
 @app.route('/customer_details')
 def customer_details():
     customers = Customer.query.all()
-    return render_template('customer_details.html', customer_details=customers)
+    total_customers_count = len(customers)
+    return render_template('customer_details.html', customer_details=customers, total_customers_count=total_customers_count)
 
 @app.route('/new_item')
 def new_item():
