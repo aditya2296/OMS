@@ -1,14 +1,22 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from validators import generate_secret_key, create_customers_table
-import pandas as pd, sqlite3
+from validators import generate_secret_key
+from werkzeug.routing import AnyConverter
+import pandas as pd
+from models import Customer, db
 
 app = Flask(__name__, template_folder="templates")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'  # Use your actual database URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.url_map.converters['int'] = AnyConverter
 app.secret_key = generate_secret_key()
 valid_credentials = {'pmadmin': 'pass123'}
 test_credentials = {'pmtest': 'pass123'}
 item_detail = []
 customer_detail = []
-create_customers_table()
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
 def home():
@@ -36,12 +44,8 @@ def item_details():
 
 @app.route('/customer_details')
 def customer_details():
-    conn = sqlite3.connect('customer_details_table.db')
-    c = conn.cursor()
-    c.execute('SELECT * FROM customer_details_table')
-    customer_details_table = c.fetchall()
-    conn.close()
-    return render_template('customer_details.html', customer_details=customer_details_table)
+    customers = Customer.query.all()
+    return render_template('customer_details.html', customer_details=customers)
 
 @app.route('/new_item')
 def new_item():
@@ -104,12 +108,10 @@ def save_new_customer():
     customerBillingType = request.form.get('CustomerBillingType')
     customerDeliveryType = request.form.get('CustomerDeliveryType')
     customerRoute = request.form.get('Route')
-    
-    conn = sqlite3.connect('customer_details_table.db')
-    c = conn.cursor()
-    c.execute('INSERT INTO customer_details_table (customername, customerlocation, customerphonenumber, customeremail, customerbillingtype, customerdeliverytype, customerroute) VALUES (?, ?, ?, ?, ?, ?, ?)', (newCustomerName, newCustomerLocation, newPhoneNumber, newCustomerEmail, customerBillingType, customerDeliveryType, customerRoute))
-    conn.commit()
-    conn.close()
+
+    new_customer = Customer(customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
+    db.session.add(new_customer)
+    db.session.commit()
 
     return 'OK', 200
 
@@ -126,14 +128,18 @@ def insert_from_excel_customer():
             file = request.files['file']
             df = pd.read_excel(file)
 
-            # Convert DataFrame rows to a list of dictionaries
-            customer_data = df.to_dict(orient='records')
-            conn = sqlite3.connect('customer_details_table.db')
-            c = conn.cursor()
-            for data in customer_data:
-                c.execute('INSERT INTO customer_details_table (customername, customerlocation, customerphonenumber, customeremail) VALUES (?, ?, ?, ?)', (data['Customer Name'], data['Location'], data['Email'], data['Mobile Number']))
-            conn.commit()
-            conn.close()
+            for index, row in df.iterrows():
+                new_customer = Customer(
+                    customer_name=row['Customer_Name'],
+                    customer_location=row['Location'],
+                    customer_phone_number=row['Mobile_Number'],
+                    customer_email=row['Email'],
+                    customer_billing_type=row['Billing_Type'],
+                    customer_delivery_type=row['Delivery_Type'],
+                    customer_route=row['Route']
+                )
+                db.session.add(new_customer)
+            db.session.commit()
             file.close
             return redirect(url_for('customer_details'))
         except Exception as e:
@@ -147,6 +153,32 @@ def order_booking():
 def new_order():
     return render_template('new_order.html')
 
+@app.route('/edit_customer/<string:customer_id>', methods=['GET', 'POST'])
+def edit_customer(customer_id):
+    customer = Customer.query.get_or_404(customer_id)
+    original_id = customer_id
+    if request.method == 'POST':
+        customer.customer_name = request.form.get('newCustomerName')
+        customer.customer_location = request.form.get('newCustomerLocation')
+        customer.customer_phone_number = request.form.get('newPhoneNumber')
+        customer.customer_email = request.form.get('newCustomerEmail')
+        customer.customer_billing_type = request.form.get('CustomerBillingType')
+        customer.customer_delivery_type = request.form.get('CustomerDeliveryType')
+        customer.customer_route = request.form.get('Route')
+        customer.id = original_id
+        db.session.commit()
+        return redirect(url_for('customer_details'))
+
+        ## update_customer_in_database(customer_id, customer_name, customer_location, customer_phone, customer_email, customer_billing_type, customer_delivery_type, customer_route)
+        ## return redirect(url_for('customer_details'))
+    return render_template('edit_customer.html', customer=customer)
+
+@app.route('/delete_customer/<string:customer_id>', methods=['GET', 'POST'])
+def delete_customer(customer_id):
+    customer = Customer.query.get_or_404(customer_id)
+    db.session.delete(customer)
+    db.session.commit()
+    return redirect(url_for('customer_details'))
 
 if __name__ == '__main__':
     app.run(debug=True)

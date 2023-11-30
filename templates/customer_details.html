@@ -51,13 +51,15 @@
 </head>
 <body>
     <div class="customer-details-container">
-        <h1 style="text-align:center">Customer Details</h1>
+        <h1 class="customer-details-header">Customer Details</h1>
+    </div>
+    <div>
         <div class="button-container">
             <button onclick="addCustomer()">Add New Customer</button>
             <button onclick="addCustomerExcelFile()">Import</button>
             <button onclick="returnDashboard()">Dashboard</button>
         </div>
-
+    </div>
         <!-- Table to display item details -->
         <table id="customerTable">
             <thead>
@@ -76,14 +78,18 @@
             <tbody>
                 {% for customer in customer_details%}
                 <tr>
-                    <td>{{ customer[0] }}</td>
-                    <td>{{ customer[1] }}</td>
-                    <td>{{ customer[2] }}</td>
-                    <td>{{ customer[3] }}</td>
-                    <td>{{ customer[4] }}</td>
-                    <td>{{ customer[5] }}</td>
-                    <td>{{ customer[6] }}</td>
-                    <td>{{ customer[7] }}</td>
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.customer_name }}</td>
+                    <td>{{ customer.customer_location }}</td>
+                    <td>{{ customer.customer_phone_number }}</td>
+                    <td>{{ customer.customer_email }}</td>
+                    <td>{{ customer.customer_billing_type }}</td>
+                    <td>{{ customer.customer_delivery_type }}</td>
+                    <td>{{ customer.customer_route }}</td>
+                    <td class="action-links">
+                        <a href="{{ url_for('edit_customer', customer_id=customer.id) }}">Edit</a>
+                        <a href="{{ url_for('delete_customer', customer_id=customer.id) }}">Delete</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
