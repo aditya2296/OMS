@@ -108,8 +108,12 @@ h1 {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
+    width: 50%;
 }
 
+.customer-details-header {
+    text-align: center;
+}
 .button-container button {
     margin-right: 10px;
 }
@@ -117,4 +121,13 @@ h1 {
 .required::after {
     content: ' *';
     color: red;
+}
+
+.drop-down-styles {
+    margin-bottom: 10px;
+}
+
+.action-links {
+    display: flex;
+    gap: 10px; /* Adjust the gap as needed */
 }
