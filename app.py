@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from validators import generate_secret_key
-from werkzeug.routing import AnyConverter
 import pandas as pd
 from models import Customer, db
 
 app = Flask(__name__, template_folder="templates")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'  # Use your actual database URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.url_map.converters['int'] = AnyConverter
 app.secret_key = generate_secret_key()
 valid_credentials = {'pmadmin': 'pass123'}
 test_credentials = {'pmtest': 'pass123'}
