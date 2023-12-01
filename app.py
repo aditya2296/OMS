@@ -83,11 +83,22 @@ def insert_from_excel():
         if not file.filename.endswith('.xlsx'):
             return 'Invalid file format. Please upload an Excel file (.xlsx)', 400
         df = pd.read_excel(file)
-        new_items = df.iloc[:, :].to_dict(orient='records')
-        item_detail.extend(new_items)
+        df['Purchase Date'] = pd.to_datetime(df['Purchase Date']).dt.date
+        for index, row in df.iterrows():
+            new_item = Item(
+                id = generate_item_id(),
+                purchase_date = row['Purchase Date'],
+                item_name = row['Item Name'],
+                item_company = row['Item Group'],
+                brand_name = row['Brand Name'],
+                quantity = row['Quantity'],
+                mrp = row['Mrp'],
+                discount = row['Discount']
+            )
+            db.session.add(new_item)
+        db.session.commit()
         file.close
-        return render_template('item_details.html', item_details=item_detail)
-
+        return redirect(url_for('item_details'))
     except Exception as e:
         return str(e), 500
     
@@ -120,10 +131,12 @@ def insert_from_excel_customer():
         try:
             if 'file' not in request.files:
                 return 'No file part', 400
-
             file = request.files['file']
+            if file.filename == '':
+                return 'No selected file', 400
+            if not file.filename.endswith('.xlsx'):
+                return 'Invalid file format. Please upload an Excel file (.xlsx)', 400
             df = pd.read_excel(file)
-
             for index, row in df.iterrows():
                 new_customer = Customer(
                     id = generate_customer_id(),
