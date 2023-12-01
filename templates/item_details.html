@@ -58,13 +58,14 @@
             <button onclick="returnDashboard()">Dashboard</button>
         </div>
 
-        <!-- Table to display item details -->
         <table id="itemTable">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Date of Purchase</th>
                     <th>Item Name</th>
                     <th>Item Group</th>
+                    <th>Brand Name</th>
                     <th>Quantity</th>
                     <th>MRP</th>
                     <th>Discount</th>
@@ -73,12 +74,14 @@
             <tbody>
                 {% for item in item_details %}
                 <tr>
-                    <td>{{ item['Date of Purchase'] }}</td>
-                    <td>{{ item['Item Name'] }}</td>
-                    <td>{{ item['Company Name'] }}</td>
-                    <td>{{ item['Quantity'] }}</td>
-                    <td>{{ item['Price'] }}</td>
-                    <td>{{ item['Discount'] }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.purchase_date }}</td>
+                    <td>{{ item.item_name }}</td>
+                    <td>{{ item.item_company }}</td>
+                    <td>{{ item.brand_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.mrp }}</td>
+                    <td>{{ item.discount }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

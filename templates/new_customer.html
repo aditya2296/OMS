@@ -10,7 +10,6 @@
     <div class="new-customer-container">
         <h2>Add New Customer</h2>
         <form onsubmit="return addNewCustomer()">
-            <!-- Form to enter new item details -->
             <div>
                 <div>
                     <label for="newCustomerName" class="required">Customer Name</label>
@@ -72,7 +71,6 @@
             var customerDeliveryType = document.getElementById('CustomerDeliveryType').value
             var route = document.getElementById('Route').value
 
-            // Create a new FormData object to send data to the server (Flask)
             var formData = new FormData();
             formData.append('newCustomerName', newCustomerName)
             formData.append('newCustomerLocation', newCustomerLocation)
@@ -82,18 +80,14 @@
             formData.append('CustomerDeliveryType', customerDeliveryType)
             formData.append('Route', route)
 
-            // Send a POST request to the server to save the new item
             fetch("{{ url_for('save_new_customer') }}", {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
-                // Check if the response is successful (you might want to add more checks)
                 if (response.ok) {
-                    // Redirect to the item_details page
                     window.location.href = "{{ url_for('customer_details') }}";
                 } else {
-                    // Handle error
                     console.error("Error saving new customer");
                 }
             })
@@ -101,7 +95,6 @@
                 console.error("Error:", error);
             });
 
-            // Prevent the form from submitting and reloading the page
             return false;
         
         }

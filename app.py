@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from validators import generate_secret_key, generate_customer_id
+from validators import generate_secret_key, generate_customer_id, generate_item_id
 import pandas as pd
-from models import Customer, db
+from models import Customer, Item, db
 
 app = Flask(__name__, template_folder="templates")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'  # Use your actual database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///item.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = generate_secret_key()
 valid_credentials = {'pmadmin': 'pass123'}
@@ -38,7 +39,8 @@ def dashboard():
 
 @app.route('/item_details')
 def item_details():
-    return render_template('item_details.html', item_details=item_detail)
+    items = Item.query.all()
+    return render_template('item_details.html', item_details=items)
 
 @app.route('/customer_details')
 def customer_details():
@@ -56,18 +58,13 @@ def save_new_item():
     newItemName = request.form.get('newItemName')
     newItemCompany = request.form.get('newItemCompany')
     newItemQuantity = request.form.get('newItemQuantity')
+    newItemBrandName = request.form.get('brandName')
     newItemPrice = request.form.get('newItemPrice')
     newItemDiscount = request.form.get('newItemDiscount')
 
-    new_item = {
-        'Date of Purchase': newItemDate,
-        'Item Name': newItemName,
-        'Company Name': newItemCompany,
-        'Quantity': int(newItemQuantity),
-        'Price': int(newItemPrice),
-        'Discount': int(newItemDiscount)
-    }
-    item_detail.append(new_item)
+    new_item = Item(id=generate_item_id(), purchase_date = newItemDate, item_name = newItemName, item_company = newItemCompany, brand_name = newItemBrandName, quantity = newItemQuantity, mrp = newItemPrice, discount = newItemDiscount)
+    db.session.add(new_item)
+    db.session.commit()
 
     return 'OK', 200
 @app.route('/insert_excel_page')
