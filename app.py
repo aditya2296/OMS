@@ -40,7 +40,8 @@ def dashboard():
 @app.route('/item_details')
 def item_details():
     items = Item.query.all()
-    return render_template('item_details.html', item_details=items)
+    total_items_count = len(items)
+    return render_template('item_details.html', item_details=items, total_items_count = total_items_count)
 
 @app.route('/customer_details')
 def customer_details():
@@ -178,9 +179,6 @@ def edit_customer(customer_id):
         customer.id = original_id
         db.session.commit()
         return redirect(url_for('customer_details'))
-
-        ## update_customer_in_database(customer_id, customer_name, customer_location, customer_phone, customer_email, customer_billing_type, customer_delivery_type, customer_route)
-        ## return redirect(url_for('customer_details'))
     return render_template('edit_customer.html', customer=customer)
 
 @app.route('/delete_customer/<string:customer_id>', methods=['GET', 'POST'])
@@ -190,5 +188,28 @@ def delete_customer(customer_id):
     db.session.commit()
     return redirect(url_for('customer_details'))
 
+@app.route('/edit_item/<string:item_id>', methods=['GET', 'POST'])
+def edit_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    original_id = item_id
+    if request.method == 'POST':
+        item.purchase_date = request.form.get('newItemDate')
+        item.item_name = request.form.get('newItemName')
+        item.item_company = request.form.get('newItemCompany')
+        item.brand_name = request.form.get('brandName')
+        item.quantity = request.form.get('newItemQuantity')
+        item.mrp = request.form.get('newItemPrice')
+        item.discount = request.form.get('newItemDiscount')
+        item.id = original_id
+        db.session.commit()
+        return redirect(url_for('item_details'))
+    return render_template('edit_item.html', item=item)
+
+@app.route('/delete_item/<string:item_id>', methods=['GET', 'POST'])
+def delete_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for('item_details'))
 if __name__ == '__main__':
     app.run(debug=True)
