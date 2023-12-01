@@ -6,9 +6,8 @@
     <title>Insert Excel Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
+<body class="common-body">
     <div class="file-upload-container">
-        <h2>Upload Excel File</h2>
         <form action="{{ url_for('insert_from_excel') }}" method="post" enctype="multipart/form-data">
             <input type="file" id="excelFile" name="file" accept=".xlsx" required>
             <button type="submit">Insert</button>
