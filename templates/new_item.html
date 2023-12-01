@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter New Item</title>
+    <title>Add New Item</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body class="common-body">
     <div class="new-item-container">
-        <h2>Enter New Item</h2>
+        <h2>Add New Item</h2>
         <form onsubmit="return insertNewItem()">
-            <!-- Form to enter new item details -->
             <label for="newItemDate" class="required">Date of Purchase</label>
             <input type="date" id="newItemDate" name="newItemDate" required>
 
@@ -19,6 +18,9 @@
 
             <label for="newItemCompany" class="required">Item Group</label>
             <input type="text" id="newItemCompany" name="newItemCompany" required>
+
+            <label for="brandName" class="required">Brand Name</label>
+            <input type="text" id="brandName" name="brandName" required>
 
             <label for="newItemQuantity" class="required">Quantity</label>
             <input type="number" id="newItemQuantity" name="newItemQuantity" required>
@@ -54,6 +56,7 @@
             var newItemDate = document.getElementById('newItemDate').value;
             var newItemName = document.getElementById('newItemName').value;
             var newItemCompany = document.getElementById('newItemCompany').value;
+            var brandName = document.getElementById('brandName').value;
             var newItemQuantity = document.getElementById('newItemQuantity').value;
             var newItemPrice = document.getElementById('newItemPrice').value;
             var newItemDiscount = document.getElementById('newItemDiscount').value;
@@ -63,6 +66,7 @@
             formData.append('newItemDate', newItemDate);
             formData.append('newItemName', newItemName);
             formData.append('newItemCompany', newItemCompany);
+            formData.append('brandName',brandName)
             formData.append('newItemQuantity', newItemQuantity);
             formData.append('newItemPrice', newItemPrice);
             formData.append('newItemDiscount', newItemDiscount);

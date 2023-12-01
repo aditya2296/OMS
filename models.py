@@ -1,5 +1,3 @@
-# models.py
-
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -16,6 +14,16 @@ class Customer(db.Model):
 
     def __repr__(self):
         return f"<Customer {self.id}: {self.name}>"
+
+class Item(db.Model):
+    id = db.Column(db.String(20), primary_key=True)
+    purchase_date = db.Column(db.String(255))
+    item_name = db.Column(db.String(255))
+    item_company = db.Column(db.String(255))
+    brand_name = db.Column(db.String(255))
+    quantity = db.Column(db.Integer)
+    mrp = db.Column(db.Integer)
+    discount = db.Column(db.Integer)
 
 def init_db(app):
     # Initialize the database with the Flask app
