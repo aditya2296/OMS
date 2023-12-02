@@ -48,6 +48,21 @@
             }
         }
     </style>
+    <script>
+        function formatPurchaseDate() {
+            var dateElements = document.getElementsByClassName('purchase-date');
+            for (var i = 0; i < dateElements.length; i++) {
+                var originalDate = dateElements[i].innerText.trim();
+                var formattedDate = new Date(originalDate).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                dateElements[i].innerText = formattedDate;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', formatPurchaseDate);
+    </script>
 </head>
 <body>
     <div class="item-details-container">
@@ -64,12 +79,12 @@
         <table id="itemTable">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Date of Purchase</th>
+                    <th>ID</th>
+                    <th>Purchase Date</th>
                     <th>Item Name</th>
-                    <th>Item Group</th>
                     <th>Brand Name</th>
-                    <th>Quantity</th>
+                    <th>Item Group</th>
+                    <th>QTY</th>
                     <th>MRP</th>
                     <th>Discount</th>
                     <th>Action</th>
@@ -79,10 +94,10 @@
                 {% for item in item_details %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.purchase_date }}</td>
+                    <td class="purchase-date">{{ item.purchase_date }}</td>
                     <td>{{ item.item_name }}</td>
-                    <td>{{ item.item_company }}</td>
                     <td>{{ item.brand_name }}</td>
+                    <td>{{ item.item_company }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>{{ item.mrp }}</td>
                     <td>{{ item.discount }}</td>
