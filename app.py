@@ -7,6 +7,8 @@ app = Flask(__name__, template_folder="templates")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///item.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
+app.config['SQLALCHEMY_BINDS'] = { 'database1': 'sqlite:///item.db', }
 app.secret_key = generate_secret_key()
 valid_credentials = {'pmadmin': 'pass123'}
 test_credentials = {'pmtest': 'pass123'}
@@ -63,7 +65,7 @@ def save_new_item():
     newItemPrice = request.form.get('newItemPrice')
     newItemDiscount = request.form.get('newItemDiscount')
 
-    new_item = Item(id=generate_item_id(), purchase_date = newItemDate, item_name = newItemName, item_company = newItemCompany, brand_name = newItemBrandName, quantity = newItemQuantity, mrp = newItemPrice, discount = newItemDiscount)
+    new_item = Item(id=generate_item_id(), modified_date = newItemDate , purchase_date = newItemDate, item_name = newItemName, item_company = newItemCompany, brand_name = newItemBrandName, quantity = newItemQuantity, mrp = newItemPrice, discount = newItemDiscount)
     db.session.add(new_item)
     db.session.commit()
 
@@ -88,6 +90,7 @@ def insert_from_excel():
         for index, row in df.iterrows():
             new_item = Item(
                 id = generate_item_id(),
+                modified_date = row['Purchase Date'],
                 purchase_date = row['Purchase Date'],
                 item_name = row['Item Name'],
                 item_company = row['Item Group'],
@@ -194,6 +197,7 @@ def edit_item(item_id):
     original_id = item_id
     if request.method == 'POST':
         item.purchase_date = request.form.get('newItemDate')
+        item.modified_date = request.form.get('editItemDate')
         item.item_name = request.form.get('newItemName')
         item.item_company = request.form.get('newItemCompany')
         item.brand_name = request.form.get('brandName')
