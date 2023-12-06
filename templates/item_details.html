@@ -80,6 +80,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>SNo.</th>
                     <th>Purchase Date</th>
                     <th>Modified Date</th>
                     <th>Item Name</th>
@@ -95,6 +96,7 @@
                 {% for item in item_details %}
                 <tr>
                     <td>{{ item.id }}</td>
+                    <td>{{ item.serial_number }}</td>
                     <td class="purchase-date">{{ item.purchase_date }}</td>
                     <td class="purchase-date">{{ item.modified_date }}</td>
                     <td>{{ item.item_name }}</td>
