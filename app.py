@@ -5,9 +5,7 @@ from models import Customer, Item, db
 
 app = Flask(__name__, template_folder="templates")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///item.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
 app.config['SQLALCHEMY_BINDS'] = { 'database1': 'sqlite:///item.db', }
 app.secret_key = generate_secret_key()
 valid_credentials = {'pmadmin': 'pass123'}
@@ -119,8 +117,9 @@ def save_new_customer():
     customerBillingType = request.form.get('CustomerBillingType')
     customerDeliveryType = request.form.get('CustomerDeliveryType')
     customerRoute = request.form.get('Route')
+    serial_number_customer = int(generate_customer_id()[7:])
 
-    new_customer = Customer(id = generate_customer_id(),customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
+    new_customer = Customer(id = generate_customer_id(), serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
     db.session.add(new_customer)
     db.session.commit()
 
@@ -142,8 +141,9 @@ def insert_from_excel_customer():
                 return 'Invalid file format. Please upload an Excel file (.xlsx)', 400
             df = pd.read_excel(file)
             for index, row in df.iterrows():
-                new_customer = Customer(
+                new_customer = Customer (
                     id = generate_customer_id(),
+                    serial_number = int(generate_customer_id()[7:]),
                     customer_name=row['Customer_Name'],
                     customer_location=row['Location'],
                     customer_phone_number=row['Mobile_Number'],
@@ -187,7 +187,11 @@ def edit_customer(customer_id):
 @app.route('/delete_customer/<string:customer_id>', methods=['GET', 'POST'])
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
+    serial_customer_id = int(customer_id[7:])
     db.session.delete(customer)
+    customers_to_update = Customer.query.filter(Customer.serial_number > serial_customer_id).all()
+    for customer in customers_to_update:
+        customer.serial_number -= 1
     db.session.commit()
     return redirect(url_for('customer_details'))
 

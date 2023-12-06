@@ -67,6 +67,7 @@
             <thead>
                 <tr>
                     <th>Id</th>
+                    <th>SNo.</th>
                     <th>Customer Name</th>
                     <th>Location</th>
                     <th>Mobile Number</th>
@@ -81,6 +82,7 @@
                 {% for customer in customer_details%}
                 <tr>
                     <td>{{ customer.id }}</td>
+                    <td>{{ customer.serial_number }}</td>
                     <td>{{ customer.customer_name }}</td>
                     <td>{{ customer.customer_location }}</td>
                     <td>{{ customer.customer_phone_number }}</td>
