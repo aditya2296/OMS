@@ -16,8 +16,10 @@ class Customer(db.Model):
         return f"<Customer {self.id}: {self.name}>"
 
 class Item(db.Model):
+    __bind_key__ = 'database1'
     id = db.Column(db.String(20), primary_key=True)
     purchase_date = db.Column(db.String(255))
+    modified_date = db.Column(db.String(255))
     item_name = db.Column(db.String(255))
     item_company = db.Column(db.String(255))
     brand_name = db.Column(db.String(255))
