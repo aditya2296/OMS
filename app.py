@@ -55,6 +55,7 @@ def new_item():
 
 @app.route('/save_new_item', methods=['POST'])
 def save_new_item():
+    items = Item.query.all()
     newItemDate = request.form.get('newItemDate')
     newItemName = request.form.get('newItemName')
     newItemCompany = request.form.get('newItemCompany')
@@ -62,8 +63,9 @@ def save_new_item():
     newItemBrandName = request.form.get('brandName')
     newItemPrice = request.form.get('newItemPrice')
     newItemDiscount = request.form.get('newItemDiscount')
+    serial_number_item = len(items) + 1
 
-    new_item = Item(id=generate_item_id(), modified_date = newItemDate , purchase_date = newItemDate, item_name = newItemName, item_company = newItemCompany, brand_name = newItemBrandName, quantity = newItemQuantity, mrp = newItemPrice, discount = newItemDiscount)
+    new_item = Item(id=generate_item_id(), serial_number = serial_number_item, modified_date = newItemDate , purchase_date = newItemDate, item_name = newItemName, item_company = newItemCompany, brand_name = newItemBrandName, quantity = newItemQuantity, mrp = newItemPrice, discount = newItemDiscount)
     db.session.add(new_item)
     db.session.commit()
 
@@ -85,9 +87,11 @@ def insert_from_excel():
             return 'Invalid file format. Please upload an Excel file (.xlsx)', 400
         df = pd.read_excel(file)
         df['Purchase Date'] = pd.to_datetime(df['Purchase Date']).dt.date
+        item_serial_number = len(Item.query.all()) + 1
         for index, row in df.iterrows():
             new_item = Item(
                 id = generate_item_id(),
+                serial_number = item_serial_number + index,
                 modified_date = row['Purchase Date'],
                 purchase_date = row['Purchase Date'],
                 item_name = row['Item Name'],
@@ -110,6 +114,7 @@ def new_customer():
 
 @app.route('/save_new_customer', methods=['POST'])
 def save_new_customer():
+    customers = Customer.query.all()
     newCustomerName = request.form.get('newCustomerName')
     newCustomerLocation = request.form.get('newCustomerLocation')
     newPhoneNumber = request.form.get('newPhoneNumber')
@@ -117,7 +122,7 @@ def save_new_customer():
     customerBillingType = request.form.get('CustomerBillingType')
     customerDeliveryType = request.form.get('CustomerDeliveryType')
     customerRoute = request.form.get('Route')
-    serial_number_customer = int(generate_customer_id()[7:])
+    serial_number_customer = len(customers) + 1
 
     new_customer = Customer(id = generate_customer_id(), serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
     db.session.add(new_customer)
@@ -140,10 +145,11 @@ def insert_from_excel_customer():
             if not file.filename.endswith('.xlsx'):
                 return 'Invalid file format. Please upload an Excel file (.xlsx)', 400
             df = pd.read_excel(file)
+            customer_serial_number = len(Customer.query.all()) + 1
             for index, row in df.iterrows():
                 new_customer = Customer (
                     id = generate_customer_id(),
-                    serial_number = int(generate_customer_id()[7:]),
+                    serial_number = customer_serial_number + index,
                     customer_name=row['Customer_Name'],
                     customer_location=row['Location'],
                     customer_phone_number=row['Mobile_Number'],
@@ -216,7 +222,11 @@ def edit_item(item_id):
 @app.route('/delete_item/<string:item_id>', methods=['GET', 'POST'])
 def delete_item(item_id):
     item = Item.query.get_or_404(item_id)
+    serial_item_id = int(item_id[8:])
     db.session.delete(item)
+    item_to_update = Item.query.filter(Item.serial_number > serial_item_id).all()
+    for item in item_to_update:
+        item.serial_number -= 1
     db.session.commit()
     return redirect(url_for('item_details'))
 if __name__ == '__main__':

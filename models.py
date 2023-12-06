@@ -19,6 +19,7 @@ class Customer(db.Model):
 class Item(db.Model):
     __bind_key__ = 'database1'
     id = db.Column(db.String(20), primary_key=True)
+    serial_number = db.Column(db.Integer)
     purchase_date = db.Column(db.String(255))
     modified_date = db.Column(db.String(255))
     item_name = db.Column(db.String(255))
