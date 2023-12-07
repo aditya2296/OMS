@@ -7,7 +7,7 @@ class Customer(db.Model):
     serial_number = db.Column(db.Integer)
     customer_name = db.Column(db.String(255))
     customer_location = db.Column(db.String(255))
-    customer_phone_number = db.Column(db.Integer)
+    customer_phone_number = db.Column(db.Integer, unique = True)
     customer_email = db.Column(db.String(255))
     customer_billing_type = db.Column(db.String(255))
     customer_delivery_type = db.Column(db.String(255))
@@ -20,6 +20,7 @@ class Item(db.Model):
     __bind_key__ = 'database1'
     id = db.Column(db.String(20), primary_key=True)
     serial_number = db.Column(db.Integer)
+    created_by = db.Column(db.String(255))
     purchase_date = db.Column(db.String(255))
     modified_date = db.Column(db.String(255))
     item_name = db.Column(db.String(255))

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from validators import generate_secret_key, generate_customer_id, generate_item_id
 import pandas as pd
 from models import Customer, Item, db
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__, template_folder="templates")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
@@ -65,7 +66,7 @@ def save_new_item():
     newItemDiscount = request.form.get('newItemDiscount')
     serial_number_item = len(items) + 1
 
-    new_item = Item(id=generate_item_id(), serial_number = serial_number_item, modified_date = newItemDate , purchase_date = newItemDate, item_name = newItemName, item_company = newItemCompany, brand_name = newItemBrandName, quantity = newItemQuantity, mrp = newItemPrice, discount = newItemDiscount)
+    new_item = Item(id=generate_item_id(), serial_number = serial_number_item, created_by = "pmadmin",modified_date = newItemDate , purchase_date = newItemDate, item_name = newItemName, item_company = newItemCompany, brand_name = newItemBrandName, quantity = newItemQuantity, mrp = newItemPrice, discount = newItemDiscount)
     db.session.add(new_item)
     db.session.commit()
 
@@ -92,6 +93,7 @@ def insert_from_excel():
             new_item = Item(
                 id = generate_item_id(),
                 serial_number = item_serial_number + index,
+                created_by = "pmadmin",
                 modified_date = row['Purchase Date'],
                 purchase_date = row['Purchase Date'],
                 item_name = row['Item Name'],
@@ -124,9 +126,13 @@ def save_new_customer():
     customerRoute = request.form.get('Route')
     serial_number_customer = len(customers) + 1
 
-    new_customer = Customer(id = generate_customer_id(), serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
-    db.session.add(new_customer)
-    db.session.commit()
+    try:
+        new_customer = Customer(id = generate_customer_id(), serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
+        db.session.add(new_customer)
+        db.session.commit()
+    except IntegrityError as e:
+        db.session.rollback()
+        return 'Mobile Number Already Exists', 400
 
     return 'OK', 200
 

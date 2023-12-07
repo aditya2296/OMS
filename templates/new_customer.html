@@ -88,7 +88,7 @@
                 if (response.ok) {
                     window.location.href = "{{ url_for('customer_details') }}";
                 } else {
-                    console.error("Error saving new customer");
+                    window.error("Mobile Number Already Exists")
                 }
             })
             .catch(error => {
