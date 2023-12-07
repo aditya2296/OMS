@@ -11,7 +11,7 @@
         <h2>Edit Item</h2>
         <form method="post" action="{{ url_for('edit_item', item_id=item.id) }}">
                 <label for="newItemDate" class="required">Purchase Date</label>
-                <input type="date" id="newItemDate" value="{{item.purchase_date}}" name="newItemDate" required>
+                <input type="date" id="newItemDate" disabled = "true" value="{{item.purchase_date}}" name="newItemDate" required>
                 <label for="editItemDate" class="required">Edit Date</label>
                 <input type="date" id="editItemDate" name="editItemDate" required>
                 <label for="newItemName" class="required">Item Name</label>
