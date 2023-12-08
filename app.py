@@ -127,7 +127,7 @@ def save_new_customer():
     serial_number_customer = len(customers) + 1
 
     try:
-        new_customer = Customer(id = generate_customer_id(), serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
+        new_customer = Customer(id = generate_customer_id(), created_by = "pmadmin",serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
         db.session.add(new_customer)
         db.session.commit()
     except IntegrityError as e:
@@ -155,6 +155,7 @@ def insert_from_excel_customer():
             for index, row in df.iterrows():
                 new_customer = Customer (
                     id = generate_customer_id(),
+                    created_by = "pmadmin",
                     serial_number = customer_serial_number + index,
                     customer_name=row['Customer_Name'],
                     customer_location=row['Location'],

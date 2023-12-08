@@ -25,28 +25,6 @@
         #customerTable th {
             background-color: #f2f2f2;
         }
-
-        @media only screen and (max-width: 600px) {
-            #customerTable {
-                border: 0;
-            }
-
-            #customerTable thead {
-                display: none;
-            }
-
-            #customerTable tbody td {
-                display: block;
-                text-align: center;
-            }
-
-            #customerTable tbody td:before {
-                content: attr(data-label);
-                display: inline-block;
-                font-weight: bold;
-                margin-right: 5px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -68,6 +46,7 @@
                 <tr>
                     <th>Id</th>
                     <th>SNo.</th>
+                    <th>Created By</th>
                     <th>Customer Name</th>
                     <th>Location</th>
                     <th>Mobile Number</th>
@@ -83,6 +62,7 @@
                 <tr>
                     <td>{{ customer.id }}</td>
                     <td>{{ customer.serial_number }}</td>
+                    <td>{{ customer.created_by }}</td>
                     <td>{{ customer.customer_name }}</td>
                     <td>{{ customer.customer_location }}</td>
                     <td>{{ customer.customer_phone_number }}</td>

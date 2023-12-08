@@ -25,28 +25,6 @@
         #itemTable th {
             background-color: #f2f2f2;
         }
-
-        @media only screen and (max-width: 600px) {
-            #itemTable {
-                border: 0;
-            }
-
-            #itemTable thead {
-                display: none;
-            }
-
-            #itemTable tbody td {
-                display: block;
-                text-align: center;
-            }
-
-            #itemTable tbody td:before {
-                content: attr(data-label);
-                display: inline-block;
-                font-weight: bold;
-                margin-right: 5px;
-            }
-        }
     </style>
     <script>
         function formatPurchaseDate() {
