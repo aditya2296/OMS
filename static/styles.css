@@ -133,7 +133,17 @@ h1 {
 }
 .count-container {
     position: absolute;
+    display: flex;
     top: 100px;
     right: 40px;
     font-size: 14px;
+}
+
+@media screen and (max-width: 767px) {
+    .count-container {
+        display: flex;
+        right: 10px;
+        top: 120px;
+        font-size: 14px;
+    }
 }
