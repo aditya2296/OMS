@@ -131,19 +131,16 @@ h1 {
     display: flex;
     gap: 10px; /* Adjust the gap as needed */
 }
-.count-container {
-    position: absolute;
-    display: flex;
-    top: 100px;
-    right: 40px;
-    font-size: 14px;
+@media screen and (min-width: 767px) {
+    .count-container {
+        position: absolute;
+        right: 40px;
+        font-size: 14px;
+    }
 }
 
 @media screen and (max-width: 767px) {
-    .count-container {
+    .button-container {
         display: flex;
-        right: 10px;
-        top: 120px;
-        font-size: 14px;
     }
 }

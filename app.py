@@ -118,6 +118,7 @@ def new_customer():
 def save_new_customer():
     customers = Customer.query.all()
     newCustomerName = request.form.get('newCustomerName')
+    newCustomerDate = request.form.get('newCustomerDate')
     newCustomerLocation = request.form.get('newCustomerLocation')
     newPhoneNumber = request.form.get('newPhoneNumber')
     newCustomerEmail = request.form.get('newCustomerEmail')
@@ -127,7 +128,7 @@ def save_new_customer():
     serial_number_customer = len(customers) + 1
 
     try:
-        new_customer = Customer(id = generate_customer_id(), created_by = "pmadmin",serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
+        new_customer = Customer(id = generate_customer_id(), created_by = "pmadmin", created_date = newCustomerDate, serial_number = serial_number_customer, customer_name=newCustomerName, customer_location = newCustomerLocation, customer_phone_number = newPhoneNumber, customer_email=newCustomerEmail, customer_billing_type = customerBillingType, customer_delivery_type = customerDeliveryType, customer_route = customerRoute)
         db.session.add(new_customer)
         db.session.commit()
     except IntegrityError as e:
@@ -151,12 +152,14 @@ def insert_from_excel_customer():
             if not file.filename.endswith('.xlsx'):
                 return 'Invalid file format. Please upload an Excel file (.xlsx)', 400
             df = pd.read_excel(file)
+            df['Created_Date'] = pd.to_datetime(df['Created_Date']).dt.date
             customer_serial_number = len(Customer.query.all()) + 1
             for index, row in df.iterrows():
                 new_customer = Customer (
                     id = generate_customer_id(),
                     created_by = "pmadmin",
                     serial_number = customer_serial_number + index,
+                    created_date=row['Created_Date'],
                     customer_name=row['Customer_Name'],
                     customer_location=row['Location'],
                     customer_phone_number=row['Mobile_Number'],
