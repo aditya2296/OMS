@@ -5,6 +5,7 @@ db = SQLAlchemy()
 class Customer(db.Model):
     id = db.Column(db.String(20), primary_key=True)
     created_by = db.Column(db.String(255))
+    created_date = db.Column(db.String(255))
     serial_number = db.Column(db.Integer)
     customer_name = db.Column(db.String(255))
     customer_location = db.Column(db.String(255))

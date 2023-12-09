@@ -12,6 +12,10 @@
         <form onsubmit="return addNewCustomer()">
             <div>
                 <div>
+                    <label for="newCustomerDate" class="required">Created Date</label>
+                    <input type="date" id="newCustomerDate" name="newCustomerDate" required>
+                </div>
+                <div>
                     <label for="newCustomerName" class="required">Customer Name</label>
                     <input type="text" id="newCustomerName" name="newCustomerName" required>
                 </div>
@@ -62,8 +66,20 @@
     </div>
 
     <script>
+        function setTodaysDate() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            document.getElementById('newCustomerDate').value = today;
+        }
+        window.onload = setTodaysDate;
         function addNewCustomer() { 
             var newCustomerName = document.getElementById('newCustomerName').value;
+            var newCustomerDate = document.getElementById('newCustomerDate').value;
             var newCustomerLocation = document.getElementById('newCustomerLocation').value;
             var newPhoneNumber = document.getElementById('newPhoneNumber').value;
             var newCustomerEmail = document.getElementById('newCustomerEmail').value;
@@ -73,6 +89,7 @@
 
             var formData = new FormData();
             formData.append('newCustomerName', newCustomerName)
+            formData.append('newCustomerDate', newCustomerDate)
             formData.append('newCustomerLocation', newCustomerLocation)
             formData.append('newPhoneNumber', newPhoneNumber)
             formData.append('newCustomerEmail', newCustomerEmail)

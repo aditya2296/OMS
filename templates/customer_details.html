@@ -47,6 +47,7 @@
                     <th>Id</th>
                     <th>SNo.</th>
                     <th>Created By</th>
+                    <th>Created Date</th>
                     <th>Customer Name</th>
                     <th>Location</th>
                     <th>Mobile Number</th>
@@ -63,6 +64,7 @@
                     <td>{{ customer.id }}</td>
                     <td>{{ customer.serial_number }}</td>
                     <td>{{ customer.created_by }}</td>
+                    <td class="purchase-date">{{ customer.created_date }}</td>
                     <td>{{ customer.customer_name }}</td>
                     <td>{{ customer.customer_location }}</td>
                     <td>{{ customer.customer_phone_number }}</td>
@@ -81,6 +83,19 @@
     </div>
 
     <script>
+        function formatPurchaseDate() {
+            var dateElements = document.getElementsByClassName('purchase-date');
+            for (var i = 0; i < dateElements.length; i++) {
+                var originalDate = dateElements[i].innerText.trim();
+                var formattedDate = new Date(originalDate).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                dateElements[i].innerText = formattedDate;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', formatPurchaseDate);
         function addCustomer() {
             window.location.href = "{{ url_for('new_customer') }}";
         }
